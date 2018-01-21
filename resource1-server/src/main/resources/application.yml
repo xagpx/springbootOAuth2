@@ -1,0 +1,17 @@
+server:
+  port: 9007
+security:
+  oauth2:
+    client:
+      clientId: resource1
+      clientSecret: secret
+      userAuthorizationUri: http://localhost:9005/oauth/authorize
+      grant-type: password
+      scope: read
+      access-token-uri: http://localhost:9005/oauth/token
+    resource:
+      userInfoUri: http://localhost:9006/user
+      jwt:
+        key-uri: http://localhost:9005/oauth/token_key
+  basic:
+    enabled: false

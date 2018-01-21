@@ -1,0 +1,7 @@
+server:
+  port: 9005
+encrypt:
+  key-store:
+    location: mytest.jks
+    secret: mypass
+    alias: mytest
