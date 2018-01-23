@@ -1,4 +1,4 @@
-package com.linyuan.oauth2config.token.store;
+package com.linyuan.oauth2config.config;
 
 import com.linyuan.oauth2config.constants.AuthoritiesEnum;
 import lombok.AllArgsConstructor;

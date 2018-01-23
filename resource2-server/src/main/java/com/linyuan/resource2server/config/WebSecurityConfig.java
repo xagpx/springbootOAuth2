@@ -1,6 +1,6 @@
 package com.linyuan.resource2server.config;
 
-import com.linyuan.oauth2config.server.config.ResServerConfig;
+import com.linyuan.oauth2config.config.ResServerConfig;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 

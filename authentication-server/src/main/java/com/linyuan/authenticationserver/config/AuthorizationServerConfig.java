@@ -1,10 +1,10 @@
 package com.linyuan.authenticationserver.config;
 
-import com.linyuan.oauth2config.server.config.AuthServerConfig;
+import com.linyuan.oauth2config.config.AuthServerConfig;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
-import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
-import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author: 林塬
@@ -13,6 +13,13 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
  */
 @Configuration
 public class AuthorizationServerConfig extends AuthServerConfig {
+
+    /**
+     * 调用父类构造函数，设置令牌失效日期等信息
+     */
+    public AuthorizationServerConfig() {
+        super((int)TimeUnit.DAYS.toSeconds(1), 0, false, false);
+    }
 
     /**
      * 配置客户端详情
@@ -30,15 +37,4 @@ public class AuthorizationServerConfig extends AuthServerConfig {
                 .scopes("read")                    // 允许的授权范围
                 .autoApprove(true);                  //登录后绕过批准询问(/oauth/confirm_access)
     }
-
-    @Override
-    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        super.configure(endpoints);
-    }
-
-    @Override
-    public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
-        super.configure(oauthServer);
-    }
-
 }

@@ -1,7 +1,5 @@
-package com.linyuan.oauth2config.server.config;
+package com.linyuan.oauth2config.config;
 
-import com.linyuan.oauth2config.token.store.AuthJWTTokenStore;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
@@ -12,20 +10,22 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.ClientDetailsService;
+import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
+import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 
 /**
  * @author: 林塬
  * @date: 2018/1/20
  * @description: OAuth2 授权服务器配置类
  */
-@Configuration
-@Import(AuthJWTTokenStore.class)
 @EnableAuthorizationServer
 public abstract class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
 
@@ -41,6 +41,29 @@ public abstract class AuthServerConfig extends AuthorizationServerConfigurerAdap
     @Autowired
     private UserDetailsService userDetailsService;
 
+    @Autowired(required = false)
+    private JdbcClientDetailsService jdbcClientDetailsService;
+
+    //令牌失效时间
+    public int accessTokenValiditySeconds;
+
+    //刷新令牌失效时间
+    public int refreshTokenValiditySeconds;
+
+    //是否可以重用刷新令牌
+    public boolean isReuseRefreshToken;
+
+    //是否支持刷新令牌
+    public boolean isSupportRefreshToken;
+
+
+    public AuthServerConfig(int accessTokenValiditySeconds, int refreshTokenValiditySeconds, boolean isReuseRefreshToken, boolean isSupportRefreshToken) {
+        this.accessTokenValiditySeconds = accessTokenValiditySeconds;
+        this.refreshTokenValiditySeconds = refreshTokenValiditySeconds;
+        this.isReuseRefreshToken = isReuseRefreshToken;
+        this.isSupportRefreshToken = isSupportRefreshToken;
+    }
+
     /**
      * 配置授权服务器端点，如令牌存储，令牌自定义，用户批准和授权类型，不包括端点安全配置
      * @param endpoints
@@ -51,12 +74,23 @@ public abstract class AuthServerConfig extends AuthorizationServerConfigurerAdap
         Collection<TokenEnhancer> tokenEnhancers = applicationContext.getBeansOfType(TokenEnhancer.class).values();
         TokenEnhancerChain tokenEnhancerChain=new TokenEnhancerChain();
         tokenEnhancerChain.setTokenEnhancers(new ArrayList<>(tokenEnhancers));
+
+        DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
+        defaultTokenServices.setReuseRefreshToken(isReuseRefreshToken);
+        defaultTokenServices.setSupportRefreshToken(isSupportRefreshToken);
+        defaultTokenServices.setTokenStore(tokenStore);
+        defaultTokenServices.setAccessTokenValiditySeconds(accessTokenValiditySeconds);
+        defaultTokenServices.setRefreshTokenValiditySeconds(refreshTokenValiditySeconds);
+        defaultTokenServices.setTokenEnhancer(tokenEnhancerChain);
+        //若通过 JDBC 存储令牌
+        if (Objects.nonNull(jdbcClientDetailsService)){
+            defaultTokenServices.setClientDetailsService(jdbcClientDetailsService);
+        }
+
         endpoints
             .authenticationManager(authenticationManager)
             .userDetailsService(userDetailsService)
-            .tokenStore(tokenStore)
-            .tokenEnhancer(tokenEnhancerChain)
-            .reuseRefreshTokens(false);
+            .tokenServices(defaultTokenServices);
     }
 
 
@@ -69,7 +103,8 @@ public abstract class AuthServerConfig extends AuthorizationServerConfigurerAdap
     public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
         oauthServer
                 .tokenKeyAccess("permitAll()")
-                .checkTokenAccess("isAuthenticated()")
+                .checkTokenAccess("permitAll()")
                 .allowFormAuthenticationForClients();
     }
+
 }

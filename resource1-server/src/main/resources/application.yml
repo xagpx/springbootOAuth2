@@ -10,7 +10,6 @@ security:
       scope: read
       access-token-uri: http://localhost:9005/oauth/token
     resource:
-      userInfoUri: http://localhost:9006/user
       jwt:
         key-uri: http://localhost:9005/oauth/token_key
   basic:

@@ -1,6 +1,6 @@
 package com.linyuan.authenticationserver.config;
 
-import com.linyuan.oauth2config.token.store.AbstractSecurityConfig;
+import com.linyuan.oauth2config.config.AbstractSecurityConfig;
 import org.springframework.context.annotation.Configuration;
 
 /**
