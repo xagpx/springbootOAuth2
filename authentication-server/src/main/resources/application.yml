@@ -5,6 +5,8 @@ encrypt:
     location: mytest.jks
     secret: mypass
     alias: mytest
+#http://127.0.0.1:9005/oauth/authorize?response_type=code&redirect_uri=http://www.baidu.com&scope=read&client_id=resource1
+#http://resource1:secret@localhost:9005/oauth/token?grant_type=authorization_code&code=f2KVsQ&redirect_uri=https://www.baidu.com
 # 若从数据库中获取客户端信息则需配置数据库源
 #spring:
 #  datasource:

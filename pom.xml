@@ -10,7 +10,7 @@
 
 	<name>oauth2-demo</name>
 	<description>Demo project for Spring Boot</description>
-	<modules>
+ 	<modules>
 		<module>authentication-server</module>
 		<module>resource1-server</module>
 		<module>resource2-server</module>
@@ -48,11 +48,11 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-jwt</artifactId>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>com.linyuan</groupId>
 			<artifactId>oauth2-config</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>org.springframework.mobile</groupId>
 			<artifactId>spring-mobile-device</artifactId>
@@ -86,7 +86,6 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-
 	</dependencies>
 
 	<dependencyManagement>

@@ -2,6 +2,7 @@ package com.linyuan.resource1server.web.rest;
 
 import com.linyuan.resource1server.Resource1ServerApplication;
 import com.linyuan.resource1server.web.api.dto.LoginDTO;
+
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpStatus;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -68,7 +69,7 @@ public class ResControllerTest {
     public void testGetLocalRes() throws Exception{
         int status = this.mockMvc.perform(
                 get("/res")
-                        .header("Authorization",OAuth2AccessToken.BEARER_TYPE+" "+oAuth2AccessToken.getValue())
+                        //.header("Authorization",OAuth2AccessToken.BEARER_TYPE+" "+oAuth2AccessToken.getValue())
                         .accept(MediaType.APPLICATION_JSON)
         ).andDo(print()).andReturn().getResponse().getStatus();
         printStatus(status);

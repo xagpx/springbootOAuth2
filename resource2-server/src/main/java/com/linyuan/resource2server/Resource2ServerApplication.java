@@ -1,8 +1,9 @@
 package com.linyuan.resource2server;
 
-import com.linyuan.oauth2config.config.annotation.EnableResJWTTokenStore;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import com.linyuan.resource2server.config.EnableResJWTTokenStore;
 
 @SpringBootApplication
 @EnableResJWTTokenStore //OAuth2 使用 JWT 解析令牌
