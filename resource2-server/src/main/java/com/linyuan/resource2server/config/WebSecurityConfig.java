@@ -17,7 +17,8 @@ public class WebSecurityConfig extends ResServerConfig{
         http.authorizeRequests()
                 //访问受保护资源 /res 的要求：客户端 Scope 为 read，用户本身角色为 USER
                 .antMatchers("/res")
-                .access("#oauth2.hasScope('read') and hasRole('USER')");
+                .access("#oauth2.hasScope('read')");
+                //.access("#oauth2.hasScope('read') and hasRole('USER')");
     }
 
 }

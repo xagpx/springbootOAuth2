@@ -1,8 +1,6 @@
-package com.example.demo.annotation;
+package com.linyuan.resource1server.config;
 
 import org.springframework.context.annotation.Import;
-
-import com.example.demo.store.AuthJWTTokenStore;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -12,10 +10,10 @@ import java.lang.annotation.Target;
 /**
  * @author: 林塬
  * @date: 2018/1/22
- * @description: 在启动类上添加该注解来----开启 JWT 令牌存储（授权服务器-非对称加密）
+ * @description: 在启动类上添加该注解来----开启通过授权服务器验证访问令牌（适用于 JDBC、内存存储令牌）
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Import(AuthJWTTokenStore.class)
-public @interface EnableAuthJWTTokenStore {
+@Import(RemoteTokenService.class)
+public @interface EnableRemoteTokenService {
 }

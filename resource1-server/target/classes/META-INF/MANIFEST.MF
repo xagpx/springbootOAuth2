@@ -1,10 +1,11 @@
 Manifest-Version: 1.0
-Implementation-Title: springbootresource
+Implementation-Title: resource2-server
 Implementation-Version: 0.0.1-SNAPSHOT
 Built-By: zgh
-Implementation-Vendor-Id: com.example
+Implementation-Vendor-Id: com.linyuan
 Build-Jdk: 1.8.0_91
-Implementation-URL: http://projects.spring.io/spring-boot/demo/
+Implementation-URL: http://projects.spring.io/spring-boot/oauth2-demo/
+ resource2-server/
 Created-By: Maven Integration for Eclipse
 Implementation-Vendor: Pivotal Software, Inc.
 

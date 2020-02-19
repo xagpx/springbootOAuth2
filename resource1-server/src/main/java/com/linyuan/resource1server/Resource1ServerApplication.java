@@ -5,10 +5,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
+import com.linyuan.resource1server.config.EnableRemoteTokenService;
 import com.linyuan.resource1server.config.EnableResJWTTokenStore;
-
+@EnableRemoteTokenService
 @SpringBootApplication
-@EnableResJWTTokenStore //OAuth2 使用 JWT 解析令牌
+//@EnableResJWTTokenStore //OAuth2 使用 JWT 解析令牌
 public class Resource1ServerApplication {
 
 	@Bean

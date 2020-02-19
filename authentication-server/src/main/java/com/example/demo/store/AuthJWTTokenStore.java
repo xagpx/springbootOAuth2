@@ -1,5 +1,6 @@
 package com.example.demo.store;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.bootstrap.encrypt.KeyProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.oauth2.provider.token.TokenStore;
@@ -25,23 +26,28 @@ public class AuthJWTTokenStore {
     @Resource(name = "keyProp")
     private KeyProperties keyProperties;
 
+    /**
+     * jwt 对称加密密钥
+     */
+    @Value("${security.oauth2.jwt.signingKey}")
+    private String signingKey;
+    
     @Bean
     public TokenStore tokenStore(JwtAccessTokenConverter jwtAccessTokenConverter) {
-        return new JwtTokenStore(jwtAccessTokenConverter);
+        return new JwtTokenStore(jwtAccessTokenConverter());
     }
 
     @Bean
     public JwtAccessTokenConverter jwtAccessTokenConverter() {
         JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-//    	JwtAccessTokenConverter converter = new JwtAccessToken();
-       KeyPair keyPair = new KeyStoreKeyFactory
-                (keyProperties.getKeyStore().getLocation(), keyProperties.getKeyStore().getSecret().toCharArray())
-                .getKeyPair(keyProperties.getKeyStore().getAlias());
-        converter.setKeyPair(keyPair);
-         
-//        final JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-//        KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(new ClassPathResource("/mytest.jks"), "mypass".toCharArray());
-//        converter.setKeyPair(keyStoreKeyFactory.getKeyPair("mytest"));
+        //对称加密
+        converter.setSigningKey(signingKey); 
+        //非对称加密
+//       KeyPair keyPair = new KeyStoreKeyFactory
+//                (keyProperties.getKeyStore().getLocation(), keyProperties.getKeyStore().getSecret().toCharArray())
+//                .getKeyPair(keyProperties.getKeyStore().getAlias());
+//        converter.setKeyPair(keyPair); 
+        
         return converter;
     }
 

@@ -2,6 +2,15 @@ server:
   port: 9006
 security:
   oauth2:
-    resource:
-      jwt:
-        key-uri: http://localhost:9005/oauth/token_key
+#非对称认证
+#    resource:
+#      jwt:
+#        key-uri: http://localhost:9005/oauth/token_key
+     jwt:
+      signingKey: 123456
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/sc_auth?characterEncoding=UTF-8&useUnicode=true&useSSL=false&serverTimezone=GMT
+    username: root
+    password: 123456

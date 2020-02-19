@@ -2,8 +2,10 @@ package com.example.demo;
 
 import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,6 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.example.demo.constants.AuthoritiesEnum;
+import com.example.demo.granter.MobileAuthenticationProvider;
+import com.example.demo.service.MobileUserDetailsService;
 
 import javax.annotation.PostConstruct;
 
@@ -34,13 +38,18 @@ public abstract class AbstractSecurityConfig extends WebSecurityConfigurerAdapte
     
     @Autowired
     private UserDetailsService userDetailsService;
-
+    
+    @Autowired
+    @Qualifier("mobileUserDetailsService")
+    private MobileUserDetailsService mobileUserDetailsService;
+    
     @PostConstruct
     public void init() {
         try {
             authenticationManagerBuilder
                     .userDetailsService(userDetailsService)
                     .passwordEncoder(passwordEncoder());
+            authenticationManagerBuilder.authenticationProvider(mobileAuthenticationProvider());
         } catch (Exception e) {
             throw new BeanInitializationException("Security configuration failed", e);
         }
@@ -64,24 +73,18 @@ public abstract class AbstractSecurityConfig extends WebSecurityConfigurerAdapte
          .and()
          .logout()
          .permitAll();
-
      http.csrf().disable(); 
-    	  
-    	/*  http
-                .exceptionHandling()
-                .and()
-                .csrf()
-                .disable()
-                .headers()
-                .frameOptions()
-                .disable()
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authorizeRequests()
-                .antMatchers("/swagger-ui/index.html")
-                .hasAuthority(AuthoritiesEnum.ADMIN.getRole()); */ 
     }
-
+    
+    /**
+     * 创建手机验证码登陆的AuthenticationProvider
+     *
+     * @return mobileAuthenticationProvider
+     */
+    @Bean
+    public MobileAuthenticationProvider mobileAuthenticationProvider() {
+        MobileAuthenticationProvider mobileAuthenticationProvider = new MobileAuthenticationProvider(this.mobileUserDetailsService);
+        mobileAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+        return mobileAuthenticationProvider;
+    }
 }
